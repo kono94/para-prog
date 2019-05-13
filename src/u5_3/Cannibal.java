@@ -18,9 +18,7 @@ public class Cannibal implements Runnable {
     public void run() {
         while (true) {
             try {
-                System.out.printf("%s is going to the buffet looking for food.\n", name);
-                buffet.serveFood();
-                System.out.printf("%s%s is eating!%s\n", ANSI_RED, name, ANSI_RESET);
+                buffet.serveFood(this);
                 Thread.sleep(eatingPace);
                 feelGood();
             } catch (InterruptedException e) {
@@ -31,5 +29,9 @@ public class Cannibal implements Runnable {
 
     private void feelGood() {
         System.out.printf("%s is feeling good now!\n", name);
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -30,9 +30,8 @@ public class Chef implements Runnable {
                     if (currentMissionaries.get() > MAX_BUFFET_CAPCITY - 1) {
                         System.out.printf("%s is trying filling the Buffet\n", name);
                         Thread.sleep(fillingPace);
-                        buffet.fill();
+                        buffet.fill(this);
                         currentMissionaries.updateAndGet((prev) -> prev - 5);
-                        System.out.printf("%s%s filled the Buffet\n%s", ANSI_GREEN, name, ANSI_RESET);
                     }
                 }
             } catch (InterruptedException e) {
@@ -48,5 +47,9 @@ public class Chef implements Runnable {
             e.printStackTrace();
         }
         System.out.printf("%s has cooked. Current Missionary-count: %s\n", name, currentMissionaries.incrementAndGet());
+    }
+
+    public String getName() {
+        return name;
     }
 }

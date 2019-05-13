@@ -11,11 +11,11 @@ public class Main {
         Buffet buffet = new Buffet();
         Set<Runnable> ppl = new HashSet<>();
 
-        ppl.add(new Cannibal("Olaf", buffet, 2000));
-        ppl.add(new Cannibal("Hans", buffet, 4000));
-        ppl.add(new Cannibal("Josef", buffet, 3500));
+        ppl.add(new Cannibal("Olaf", buffet, 6000));
+        ppl.add(new Cannibal("Hans", buffet, 7000));
+        ppl.add(new Cannibal("Josef", buffet, 7000));
         ppl.add(new Chef("Harald", buffet, 3000, 2000));
-        ppl.add(new Chef("Max", buffet, 3000, 2000));
+        //ppl.add(new Chef("Max", buffet, 3000, 2000));
         for (Runnable r : ppl) new Thread(r).start();
     }
 }
