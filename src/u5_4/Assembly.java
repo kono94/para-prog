@@ -8,10 +8,9 @@ import static u5_4.ColorConstants.*;
 public class Assembly implements Runnable{
     private CyclicBarrier barrier;
 
-    Assembly(CyclicBarrier barrier){
+    public Assembly(CyclicBarrier barrier) {
         this.barrier = barrier;
     }
-
 
     @Override
     public void run() {

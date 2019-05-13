@@ -1,0 +1,8 @@
+const M = 5 // Kapazitaet des Bueffets
+set K = {a, b, c} // Menge der Kannibalen
+Kannibale = (gehEssen -> binZufrieden -> Kannibale).
+Koch = (koche -> fuelleBueffet -> Koch).
+Buffet = Buffet[M],
+Buffet[n:0..M]= (when(n>0) gehEssen -> Buffet[n-1]
+				|when(n==0) fuelleBueffet -> Buffet[M]).
+||All = (K:Kannibale || Koch || Buffet)/{K.gehEssen/gehEssen}.

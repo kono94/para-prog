@@ -13,14 +13,14 @@ public class Production {
         productionProcesses.add(new ProductionProcess("B", numberOfParts));
         productionProcesses.add(new ProductionProcess("C", numberOfParts));
 
-        // size of barrier equals productions threads and the assembly thread;
-        // assembly thread is waiting for the other threads to call .await()
+        // Size of barrier equals productions threads and the assembly thread;
+        // Assembly thread is waiting for the other threads to call .await()
         CyclicBarrier cyclicBarrier = new CyclicBarrier(productionProcesses.size() + 1);
 
-        // passing barrier to all processes
+        // Passing barrier to all processes
         for (ProductionProcess c: productionProcesses) c.setBarrier(cyclicBarrier);
 
-        // starting all production processes
+        // Starting all production processes
         for (ProductionProcess c: productionProcesses) new Thread(c).start();
 
         // starting Assembly process

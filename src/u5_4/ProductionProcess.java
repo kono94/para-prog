@@ -8,12 +8,12 @@ public class ProductionProcess implements Runnable{
     private CyclicBarrier barrier;
     private int numberOfParts;
 
-    ProductionProcess(String prodName, int numberOfParts){
+    public ProductionProcess(String prodName, int numberOfParts) {
         this.prodName = prodName;
         this.numberOfParts = numberOfParts;
     }
 
-    void setBarrier(CyclicBarrier cb){
+    public void setBarrier(CyclicBarrier cb) {
         barrier = cb;
     }
 
