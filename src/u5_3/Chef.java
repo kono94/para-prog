@@ -3,10 +3,9 @@ package u5_3;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static u5_3.Main.MAX_BUFFET_CAPCITY;
-import static u5_4.ColorConstants.*;
 
 public class Chef implements Runnable {
-    private static final Object sempahor = new Object();
+    private static final Object obj = new Object();
     private static AtomicInteger currentMissionaries = new AtomicInteger(0);
     private int fillingPace;
     private String name;
@@ -26,7 +25,7 @@ public class Chef implements Runnable {
         while (true) {
             try {
                 cook();
-                synchronized (sempahor) {
+                synchronized (obj) {
                     if (currentMissionaries.get() > MAX_BUFFET_CAPCITY - 1) {
                         System.out.printf("%s is trying filling the Buffet\n", name);
                         Thread.sleep(fillingPace);

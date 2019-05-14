@@ -23,7 +23,7 @@ public class Production {
         // Starting all production processes
         for (ProductionProcess c: productionProcesses) new Thread(c).start();
 
-        // starting Assembly process
+        // Starting Assembly process
         new Thread(new Assembly(cyclicBarrier)).start();
     }
 }

@@ -15,7 +15,7 @@ public class Main {
         ppl.add(new Cannibal("Hans", buffet, 7000));
         ppl.add(new Cannibal("Josef", buffet, 7000));
         ppl.add(new Chef("Harald", buffet, 3000, 2000));
-        //ppl.add(new Chef("Max", buffet, 3000, 2000));
+        ppl.add(new Chef("Max", buffet, 3000, 2000));
         for (Runnable r : ppl) new Thread(r).start();
     }
 }

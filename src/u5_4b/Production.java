@@ -1,5 +1,6 @@
 package u5_4b;
 
+import u5_4.Assembly;
 import u5_4.ProductionProcess;
 
 import java.util.HashSet;
@@ -25,15 +26,7 @@ public class Production {
         // Size of barrier equals productions threads.
         // No Assembly Thread needed.
         // BUT: Other production threads have to wait before producing again until assembly is complete!
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(productionProcesses.size(), () -> {
-            System.out.printf("%s Beginne Montage... %s\n", ANSI_RED, ANSI_RESET);
-            try {
-                Thread.sleep((int) (Math.random() * 6000));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.printf("%s Montiert! %d. Teil fertig !!!%s\n", ANSI_GREEN, counter.incrementAndGet(), ANSI_RESET);
-        });
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(productionProcesses.size(), new Assembly()::run2);
 
         // Passing barrier to all processes
         for (ProductionProcess c : productionProcesses) c.setBarrier(cyclicBarrier);
