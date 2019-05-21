@@ -33,7 +33,6 @@ public class TwoCarsControl implements RollerCoasterMonitor {
     }
 
     public synchronized void departure() throws InterruptedException {
-        System.out.println(cars.get(Thread.currentThread().getId()).passengerCount);
         while(!(cars.get(Thread.currentThread().getId()).isFirst && cars.get(Thread.currentThread().getId()).passengerCount == Constants.COASTER_CAR_MAX_PASSENGERS)) wait();
         System.out.println("Coaster Car is allowed to start!");
     }
