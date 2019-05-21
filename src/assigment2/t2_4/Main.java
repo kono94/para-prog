@@ -1,22 +1,22 @@
 package assigment2.t2_4;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import assigment2.t2_2.CoasterCar;
+import assigment2.t2_2.Turnstile;
+
 
 public class Main {
     public static void main(String[] args) {
-        XControl xcontrol = new XControl();
+        TwoCarsControl twoCarsControl = new TwoCarsControl();
 
-        XCoasterCar car1 = new XCoasterCar(xcontrol, "A", 4000);
-        XCoasterCar car2 = new XCoasterCar(xcontrol, "B", 4000);
+        CoasterCar car1 = new CoasterCar(twoCarsControl, 4000);
+        CoasterCar car2 = new CoasterCar(twoCarsControl, 4000);
 
-        Queue<XCoasterCar> carQueue = new ArrayDeque<>();
-        carQueue.add(car1);
-        carQueue.add(car2);
-        xcontrol.setCars(carQueue);
+        Thread a = new Thread(car1);
+        Thread b = new Thread(car2);
 
-        new Thread(car1).start();
-        new Thread(car2).start();
-        new Thread(new XTurnstile(xcontrol, "Turnstile", 1000)).start();
+        twoCarsControl.initCars(a.getId(), b.getId());
+        new Thread(new Turnstile(twoCarsControl, "Turnstile", 1000)).start();
+        a.start();
+        b.start();
     }
 }

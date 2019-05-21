@@ -3,9 +3,9 @@ package assigment2.t2_2;
 public class Turnstile implements Runnable{
     private String name;
     private int avgSpped;
-    private Controller control;
+    private RollerCoasterMonitor control;
 
-    public Turnstile(Controller control, String name, int avgSpeed){
+    public Turnstile(RollerCoasterMonitor control, String name, int avgSpeed){
         this.name = name;
         this.avgSpped = avgSpeed;
         this.control = control;
