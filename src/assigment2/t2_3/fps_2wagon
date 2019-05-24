@@ -12,4 +12,4 @@ Steuerung[y:0..M][x:0..M][f:0..1] = (
 							when(x==M && f==0) b.abfahrt -> Steuerung[y][x][f] |
 			 				 a.aussteigen -> Steuerung[0][x][0] |
 							 b.aussteigen -> Steuerung[y][0][1]).
-||All = (Drehkreuz || W:Wagen || Steuerung)/{W.abfahrt/abfahrt, W.aussteigen/aussteigen}.
+||All = (Drehkreuz || W:Wagen || Steuerung).
