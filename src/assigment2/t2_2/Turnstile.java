@@ -1,13 +1,11 @@
 package assigment2.t2_2;
 
 public class Turnstile implements Runnable{
-    private String name;
-    private int avgSpped;
+    private int avgSpeed;
     private RollerCoasterMonitor control;
 
-    public Turnstile(RollerCoasterMonitor control, String name, int avgSpeed){
-        this.name = name;
-        this.avgSpped = avgSpeed;
+    public Turnstile(RollerCoasterMonitor control, int avgSpeed){
+        this.avgSpeed = avgSpeed;
         this.control = control;
     }
 
@@ -15,7 +13,7 @@ public class Turnstile implements Runnable{
     public void run() {
         for(int i=0; i < Constants.VISITOR_COUNT; ++i){
             try {
-                Thread.sleep(avgSpped);
+                Thread.sleep((int)(avgSpeed*Math.random()));
                 control.passenger();
             } catch (InterruptedException e) {
                 e.printStackTrace();
