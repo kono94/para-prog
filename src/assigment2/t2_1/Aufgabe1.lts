@@ -4,7 +4,5 @@ Wagen = (abfahrt -> aussteigen-> Wagen).
 Steuerung = Steuerung[0],
 Steuerung[n:0..M] = (when(n<M) passagier -> Steuerung[n+1] |
 			 		 when(n==M) abfahrt -> Steuerung[n] |
-			 				    aussteigen -> Steuerung[0]).
+                     aussteigen -> Steuerung[0]).
 ||All = (Drehkreuz || Wagen || Steuerung).
-
-

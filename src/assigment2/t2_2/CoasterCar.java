@@ -9,6 +9,15 @@ public class CoasterCar implements Runnable {
         this.roundTime = roundTime;
     }
 
+    /**
+     * The coaster car is always trying to departure. If the monitor
+     * is not blocking the car thread anymore, the car is able to take the ride
+     * (displayed by Thread.sleep());
+     * It then returns to the station and all passengers are exiting the car.
+     * <p>
+     * Note: It is not possible for the passengers to exit the car before the ride,
+     * even though the monitor would allow it.
+     */
     @Override
     public void run() {
         while (true) {
