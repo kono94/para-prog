@@ -1,0 +1,12 @@
+a) Ist SafePoint thread-safe?
+   A: Ja, da die Interface-Methoden .get() und .set() explizit
+      synchronized deklariert sind.
+
+   Ist diese Klasse zur Speicherung von Koordinaten im Rahmen des Vehicle Trackers geeignet?
+   A: Ja, da die .set()-Methode synchronized ist und die .get() Methode "quasi" eine
+      Kopie der Werte als Array liefert, da der primitive Datentyp int, keine Referenzen zulässt.
+
+
+   Wie ist eine alternative Implementierung des Copy-Konstrukturs durch this(p.x, p.y)
+   statt this(p.get() zu bewerten?
+   A: Dürfte nicht Thread-safe sein, aber konnte den Effekt nicht produzieren.
