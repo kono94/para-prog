@@ -20,7 +20,7 @@ public class Boy extends Thread {
                 slideTimes++;
                 System.out.println(name + " is sliding for the " + slideTimes + " time; Priority: " + this.getPriority());
                 // why this behaviour
-                Thread.sleep(5);
+                //Thread.sleep(5);
                 slide.exit();
                 //Thread.yield();
             } catch (InterruptedException e) {

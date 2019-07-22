@@ -7,7 +7,7 @@ package u8_2;
  * (Semaphore, Monitore, ...)
  * <p>
  * Threads werden zur Vorrangsteuerung in mehreren Prioritatsstufen
- * ausgefuhrt (z. B. in Java: ¨ setPriority(int prio))
+ * ausgeführt (z.B. in Java: setPriority(int prio))
  * <p>
  * Es sind weniger Prozessoren als Prozesse vorhanden
  */
@@ -18,17 +18,18 @@ public class Main {
         Slide slide = new Slide();
 
         Boy[] boys = new Boy[]{
-                new Boy("Bob", slide, 1),
-                new Boy("Jens", slide, 2),
-                new Boy("Ulf", slide, 3),
-                new Boy("Kelvin", slide, 4),
-                new Boy("Hecht", slide, 5),
-                new Boy("Ulrich", slide, 6),
-                new Boy("Maxi", slide, 7),
-                new Boy("Peter", slide, 8),
-                new Boy("Thomas", slide, 9),
-                new Boy("Oliver", slide, 10),
+                new Boy("Thomas", slide, 5),
+                new Boy("Dennis", slide, 5),
+                new Boy("Henrik", slide, 5),
+                new Boy("Michael", slide, 5),
+                new Boy("Peter", slide, 5),
+                new Boy("Karin", slide, 5),
+                new Boy("Ulrike", slide, 5),
+                new Boy("Alfred", slide, 5),
+                new Boy("Oliver", slide, 5),
+                new Boy("Nadja", slide, 5),
         };
+
         /*
         Boy[] boys = new Boy[]{
                 new Boy("Bob", slide, 1),
@@ -61,7 +62,7 @@ public class Main {
         }
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
             RUN = false;
             System.out.println("Letting all Threads end");
             Thread.sleep(1000);
