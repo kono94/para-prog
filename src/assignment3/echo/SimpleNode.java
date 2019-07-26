@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 public class SimpleNode extends NodeAbstract {
     private int count = 0;
     private Node wokeUpBy;
-    private boolean receivedFirstWakUpCall = false;
+    private boolean receivedFirstWakeUpCall = false;
     private StringBuilder echoResult = new StringBuilder();
 
     public SimpleNode(String name, boolean isInitiator) {
@@ -42,7 +42,7 @@ public class SimpleNode extends NodeAbstract {
         if (wokeUpBy == null) {
             System.out.println(this + ": Woke-up from: " + neighbour);
             wokeUpBy = neighbour;
-            receivedFirstWakUpCall = true;
+            receivedFirstWakeUpCall = true;
         } else {
             System.out.println(this + ": Ignoring wakeup-call from: " + neighbour);
         }
@@ -60,26 +60,22 @@ public class SimpleNode extends NodeAbstract {
 
     @Override
     public synchronized void run() {
+        ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
+
         if (isInitiator) {
-            ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
             neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleNode.this)));
         }
 
         while (true) {
             try {
-                System.out.println("Iteration from " + this);
-                System.out.println(this + " " + count + " " + getNeighbourCount());
-
-                if (receivedFirstWakUpCall) {
+                if (receivedFirstWakeUpCall) {
                     System.out.println(this + " waking up neighbours");
-
-                    ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
                     neighbours.forEach(e -> {
                         if (e != wokeUpBy) {
                             executorService.submit(() -> e.wakeup(SimpleNode.this));
                         }
                     });
-                    receivedFirstWakUpCall = false;
+                    receivedFirstWakeUpCall = false;
                 }
 
                 if (count == getNeighbourCount()) {
@@ -88,13 +84,14 @@ public class SimpleNode extends NodeAbstract {
                     } else {
                         wokeUpBy.echo(this, echoResult);
                     }
-                    return;
+                    break;
                 }
                 wait();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        executorService.shutdownNow();
     }
 
     private int getNeighbourCount() {
