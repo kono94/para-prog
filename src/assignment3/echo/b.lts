@@ -1,0 +1,9 @@
+const N = 3
+set W = {a,b,c}
+Node(Index=0, Init=0) = Node[Index][0][Init][0],
+Node[i:0..N][o:0..11][l:0..1][m:0..1] = (
+	when(l==1&&m==0) wakeup -> Node[i][o][1][1] |
+	when(o<N) wakeup -> Node[i][o+1][1][1] |
+	when(o==N) echo -> Node[i][o][1][1]).
+
+||All = (a:Node(1,1) || b:Node(2,0) || c:Node(3,0)).

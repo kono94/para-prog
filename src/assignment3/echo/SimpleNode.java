@@ -53,8 +53,7 @@ public class SimpleNode extends NodeAbstract {
     public synchronized void echo(Node neighbour, Object data) {
         System.out.println(this + ": Got echo-call from: " + neighbour);
         count++;
-        echoResult.append(neighbour).append(" -> ").append(this).append("\n").append(data);
-        System.out.println("New echo-result " + echoResult);
+        echoResult.append(neighbour).append(" <-> ").append(this).append("\n").append(data);
         notify();
     }
 
