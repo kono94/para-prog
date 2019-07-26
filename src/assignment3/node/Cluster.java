@@ -27,7 +27,7 @@ public class Cluster {
         });
         sb.append("} \n @enduml");
         try {
-            Files.write(Paths.get("/src/assignment3/output.puml"), sb.toString().getBytes());
+            Files.write(Paths.get("src/assignment3/output.puml"), sb.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

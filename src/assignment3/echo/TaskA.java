@@ -18,7 +18,7 @@ public class TaskA {
 
         a.setupNeighbours(b, c);
         b.setupNeighbours(d);
-        d.setupNeighbours(c);
+        c.setupNeighbours(d);
 
         Cluster cluster = new Cluster(a, b, c, d);
         cluster.printConnections();

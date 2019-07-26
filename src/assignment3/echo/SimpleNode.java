@@ -3,11 +3,13 @@ package assignment3.echo;
 import assignment3.node.Node;
 import assignment3.node.NodeAbstract;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class SimpleNode extends NodeAbstract {
     private int count = 0;
     private Node wokeUpBy;
     private boolean receivedFirstWakUpCall = false;
-    private boolean receivedEcho = false;
     private StringBuilder echoResult = new StringBuilder();
 
     public SimpleNode(String name, boolean isInitiator) {
@@ -51,7 +53,6 @@ public class SimpleNode extends NodeAbstract {
     public synchronized void echo(Node neighbour, Object data) {
         System.out.println(this + ": Got echo-call from: " + neighbour);
         count++;
-        receivedEcho = true;
         echoResult.append(neighbour).append(" -> ").append(this).append("\n").append(data);
         System.out.println("New echo-result " + echoResult);
         notify();
@@ -60,7 +61,8 @@ public class SimpleNode extends NodeAbstract {
     @Override
     public synchronized void run() {
         if (isInitiator) {
-            neighbours.stream().parallel().forEach(e -> e.wakeup(this));
+            ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
+            neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleNode.this)));
         }
 
         while (true) {
@@ -69,10 +71,13 @@ public class SimpleNode extends NodeAbstract {
                 System.out.println(this + " " + count + " " + getNeighbourCount());
 
                 if (receivedFirstWakUpCall) {
-                    System.out.println(this + " waking up neigbhours");
-                    neighbours.stream().parallel().filter(e -> e != wokeUpBy).forEach(e -> {
-                        System.out.println(this + " waking up " + e);
-                        e.wakeup(this);
+                    System.out.println(this + " waking up neighbours");
+
+                    ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
+                    neighbours.forEach(e -> {
+                        if (e != wokeUpBy) {
+                            executorService.submit(() -> e.wakeup(SimpleNode.this));
+                        }
                     });
                     receivedFirstWakUpCall = false;
                 }

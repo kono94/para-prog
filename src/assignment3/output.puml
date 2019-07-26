@@ -3,10 +3,10 @@ digraph G {
  concentrate=true 
 A [color=red]A -> B;
 A -> C;
-D -> B;
-D -> C;
 B -> A;
 B -> D;
+D -> B;
+D -> C;
 C -> A;
 C -> D;
 } 
