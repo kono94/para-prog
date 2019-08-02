@@ -1,7 +1,5 @@
-package assignment3.node;
+package assignment3.election.node;
 
-
-import assignment3.echo.SimpleNode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,10 +8,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cluster {
-    Set<SimpleNode> nodes;
+import assignment3.echo.SimpleNode;
+import assignment3.election.SimpleElectionNode;
 
-    public Cluster(SimpleNode... nodes) {
+public class ElectionCluster {
+    Set<SimpleElectionNode> nodes;
+
+    public ElectionCluster(SimpleElectionNode... nodes) {
         this.nodes = new HashSet<>(Arrays.asList(nodes));
     }
 
@@ -27,7 +28,7 @@ public class Cluster {
         });
         sb.append("} \n @enduml");
         try {
-            Files.write(Paths.get("src/assignment3/output-task-a.puml"), sb.toString().getBytes());
+            Files.write(Paths.get("src/assignment3/output-task-b.puml"), sb.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,6 +39,6 @@ public class Cluster {
     }
 
     public void printConnections() {
-        nodes.forEach(SimpleNode::printNeighbours);
+        nodes.forEach(SimpleElectionNode::printNeighbours);
     }
 }

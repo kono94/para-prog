@@ -1,24 +1,24 @@
-package assignment3.echo;
-
-import assignment3.node.Node;
-import assignment3.node.NodeAbstract;
+package assignment3.election;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SimpleNode extends NodeAbstract {
+import assignment3.election.node.ElectionNode;
+import assignment3.election.node.ElectionNodeAbstract;
+
+public class SimpleElectionNode extends ElectionNodeAbstract {
   private int count = 0;
-  private Node wokeUpBy;
+  private ElectionNode wokeUpBy;
   private boolean receivedFirstWakeUpCall = false;
   private StringBuilder echoResult = new StringBuilder();
 
-  public SimpleNode(String name, boolean isInitiator) {
-    super(name, isInitiator);
+  public SimpleElectionNode(String name, int identity, boolean isInitiator) {
+    super(name, identity, isInitiator);
   }
 
   @Override
-  public void setupNeighbours(Node... neighbours) {
-    for (Node n : neighbours) {
+  public void setupNeighbours(ElectionNode... neighbours) {
+    for (ElectionNode n : neighbours) {
       this.neighbours.add(n);
       n.hello(this);
     }
@@ -31,26 +31,37 @@ public class SimpleNode extends NodeAbstract {
   }
 
   @Override
-  public void hello(Node neighbour) {
+  public void hello(ElectionNode neighbour) {
     this.neighbours.add(neighbour);
   }
 
   @Override
-  public synchronized void wakeup(Node neighbour) {
+  public synchronized void wakeup(ElectionNode neighbour, int identity) {
     System.out.println(this + ": Got wakeup-call from: " + neighbour);
-    count++;
-    if (wokeUpBy == null) {
+    if (isInitiator && identity > this.identity) {
+      isInitiator = false;
+    }
+    if (currStrongestIdentity < identity) {
       System.out.println(this + ": Woke-up from: " + neighbour);
       wokeUpBy = neighbour;
+      currStrongestIdentity = identity;
       receivedFirstWakeUpCall = true;
+      count = 0;
     } else {
-      System.out.println(this + ": Ignoring wakeup-call from: " + neighbour);
+      if (currStrongestIdentity > identity) {
+	System.out.println(this + ": current strongest identity is bigger than from " + neighbour + " (" + currStrongestIdentity + " > " + identity + ")");
+      } else {
+	System.out.println(this + ": Ignoring wakeup-call from: " + neighbour);
+      }
+    }
+    if (identity == currStrongestIdentity && !isInitiator) {
+      count++;
     }
     notify();
   }
 
   @Override
-  public synchronized void echo(Node neighbour, Object data) {
+  public synchronized void echo(ElectionNode neighbour, Object data) {
     System.out.println(this + ": Got echo-call from: " + neighbour);
     count++;
     echoResult.append(neighbour).append(" <-> ").append(this).append("\n").append(data);
@@ -62,16 +73,16 @@ public class SimpleNode extends NodeAbstract {
     ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
 
     if (isInitiator) {
-      neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleNode.this)));
+      neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleElectionNode.this, identity)));
     }
 
     while (true) {
       try {
 	if (receivedFirstWakeUpCall) {
-	  System.out.println(this + " waking up neighbours");
+	  System.out.println(this + ": waking up neighbours");
 	  neighbours.forEach(e -> {
 	    if (e != wokeUpBy) {
-	      executorService.submit(() -> e.wakeup(SimpleNode.this));
+	      executorService.submit(() -> e.wakeup(SimpleElectionNode.this, currStrongestIdentity));
 	    }
 	  });
 	  receivedFirstWakeUpCall = false;
@@ -79,7 +90,7 @@ public class SimpleNode extends NodeAbstract {
 
 	if (count == getNeighbourCount()) {
 	  if (isInitiator) {
-	    System.out.println("Finished! Result: \n" + echoResult);
+	    System.out.println(this + ": Finished! Result: \n" + echoResult);
 	  } else {
 	    wokeUpBy.echo(this, echoResult);
 	  }
