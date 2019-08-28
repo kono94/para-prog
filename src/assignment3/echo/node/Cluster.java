@@ -1,4 +1,4 @@
-package assignment3.node;
+package assignment3.echo.node;
 
 
 import assignment3.echo.SimpleNode;

@@ -1,7 +1,7 @@
 package assignment3.echo;
 
 
-import assignment3.node.Cluster;
+import assignment3.echo.node.Cluster;
 
 public class TaskA {
     public static void main(String[] args) {
