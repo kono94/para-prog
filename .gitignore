@@ -4,5 +4,5 @@ out/
 /bin/
 .classpath
 .project
-src/assignment3/output-task-b.puml
-src/assignment3/output-task-a.puml
+*output-task-b.puml
+*output-task-a.puml

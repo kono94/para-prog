@@ -57,6 +57,10 @@ public abstract class ElectionNodeAbstract extends Thread implements ElectionNod
      * Therefore call method <code>hello</code> of each neighbour here.
      */
     public abstract void setupNeighbours(ElectionNode... neighbours);
+    
+    public int getIdentity() {
+      return identity;
+    }
 
     /**
      * Utility method to print this node in a readable way

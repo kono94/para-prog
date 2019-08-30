@@ -39,17 +39,16 @@ class Test2 {
   }
 
   @Test
-  @RepeatedTest(value = 100)
+  @RepeatedTest(value = 99)
   void test() {
     ElectionCluster cluster = new ElectionCluster(a, b, c, d);
     cluster.printConnections();
-    cluster.visualize();
     cluster.startNodes();
     
     int count = 0;
     while (!d.hasWon()) {
       try {
-	if (count++ == 10000) {
+	if (count++ == 2000) {
 	  break;
 	}
 	Thread.sleep(1);

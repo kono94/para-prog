@@ -121,7 +121,10 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                     System.out.println(this + ": waking up neighbours");
                     neighbours.forEach(e -> {
                         if (e != wokeUpBy) {
-                            executorService.submit(() -> e.wakeup(SimpleElectionNode.this, currStrongestIdentity));
+                            int currStrongestIdentityBuff = currStrongestIdentity; 
+                            executorService.submit(() -> {
+                        	e.wakeup(SimpleElectionNode.this, currStrongestIdentityBuff);
+                            });
                         }
                     });
                     receivedFirstWakeUpCall = false;
@@ -146,7 +149,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                 e.printStackTrace();
             }
         }
-        executorService.shutdownNow();
+        executorService.shutdown();
     }
 
     private int getNeighbourCount() {
@@ -156,5 +159,21 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     public boolean hasWon() {
       return won;
     }
-
+    
+    public int getStrongestIdentity() {
+      return currStrongestIdentity;
+    }
+    
+    public ElectionNode getWokeUpBy() {
+      return wokeUpBy;
+    }
+    
+    public int getCount() {
+      return count;
+    }
+    
+    public boolean isReceivedFirstWakeUpCall() {
+      return receivedFirstWakeUpCall;
+    }
+    
 }
