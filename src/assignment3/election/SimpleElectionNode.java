@@ -9,14 +9,20 @@ import assignment3.election.node.ElectionNodeAbstract;
 import assignment3.util.ColorConstants;
 
 public class SimpleElectionNode extends ElectionNodeAbstract {
+  
+    private final static Logger Log = Logger.getLogger(SimpleElectionNode.class.getName());
+
     private int count = 0;
     private ElectionNode wokeUpBy;
     private boolean receivedFirstWakeUpCall = false;
     private StringBuilder echoResult = new StringBuilder();
-    private final static Logger Log = Logger.getLogger(SimpleElectionNode.class.getName());
 
+    private volatile boolean won;
+    
     public SimpleElectionNode(String name, int identity, boolean isInitiator) {
         super(name, identity, isInitiator);
+        this.won = false;
+    
     }
 
     @Override
@@ -124,6 +130,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                 if (count == getNeighbourCount()) {
                     if (isInitiator) {
                         System.out.printf("%s %s won the election process! Result: %s %s\n", ColorConstants.ANSI_RED,  this,  echoResult, ColorConstants.ANSI_RESET);
+                        won = true;
                     } else {
                         wokeUpBy.echo(this, echoResult);
                     }
@@ -144,6 +151,10 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
 
     private int getNeighbourCount() {
         return neighbours.size();
+    }
+    
+    public boolean hasWon() {
+      return won;
     }
 
 }

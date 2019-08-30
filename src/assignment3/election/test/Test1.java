@@ -30,10 +30,10 @@ public class Test1 {
 
   @After
   public void tearDown() throws Exception {
-    assertEquals(false, a.isWon());
-    assertEquals(false, b.isWon());
-    assertEquals(false, c.isWon());
-    assertEquals(true, d.isWon());
+    assertEquals(false, a.hasWon());
+    assertEquals(false, b.hasWon());
+    assertEquals(false, c.hasWon());
+    assertEquals(true, d.hasWon());
   }
 
   @Test
@@ -44,7 +44,7 @@ public class Test1 {
     cluster.startNodes();
     
     int count = 0;
-    while (!d.isWon()) {
+    while (!d.hasWon()) {
       try {
 	if (count++ == 2000) {
 	  break;
