@@ -1,16 +1,16 @@
 package assignment3.election.test;
 
-import assignment3.election.SimpleElectionNode;
-import assignment3.election.node.ElectionCluster;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import assignment3.election.SimpleElectionNode;
 
-class Test2 {
-
+class WakeUpTest {
+  
   private SimpleElectionNode a;
   private SimpleElectionNode b;
   private SimpleElectionNode c;
@@ -30,30 +30,25 @@ class Test2 {
 
   @AfterEach
   void tearDown() throws Exception {
-    assertFalse(a.hasWon());
-    assertFalse(b.hasWon());
-    assertFalse(c.hasWon());
-    assertTrue(d.hasWon());
   }
 
   @Test
   @RepeatedTest(value = 99)
   void test() {
-    ElectionCluster cluster = new ElectionCluster(a, b, c, d);
-    cluster.printConnections();
-    cluster.startNodes();
+    assertEquals(Integer.MIN_VALUE, c.getStrongestIdentity());
     
-    int count = 0;
-    while (!d.hasWon()) {
-      try {
-	if (count++ == 2000) {
-	  break;
-	}
-	Thread.sleep(1);
-      } catch (InterruptedException e) {
-	e.printStackTrace();
-      }
-    }
+    c.wakeup(a, 3);
+    assertEquals(a.getIdentity(), c.getStrongestIdentity());
+    assertEquals(a, c.getWokeUpBy());
+    
+    c.wakeup(b, 2);
+    assertEquals(a.getIdentity(), c.getStrongestIdentity());
+    assertEquals(a, c.getWokeUpBy());
+
+    c.wakeup(d, 4);
+    assertEquals(d.getIdentity(), c.getStrongestIdentity());
+    assertEquals(d, c.getWokeUpBy());
+  
   }
 
 }

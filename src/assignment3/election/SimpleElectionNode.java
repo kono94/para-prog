@@ -141,8 +141,6 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                     currStrongestIdentity = Integer.MIN_VALUE;
                     count = 0;
                     echoResult = new StringBuilder();
-
-
                 }
                 System.out.println(this + " is sleeping again");
                 wait();
@@ -159,6 +157,22 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     
     public boolean hasWon() {
       return won;
+    }
+
+    public int getStrongestIdentity() {
+      return currStrongestIdentity;
+    }
+
+    public ElectionNode getWokeUpBy() {
+      return wokeUpBy;
+    }
+
+    public int getCount() {
+      return count;
+    }
+
+    public boolean isReceivedFirstWakeUpCall() {
+      return receivedFirstWakeUpCall;
     }
 
 }
