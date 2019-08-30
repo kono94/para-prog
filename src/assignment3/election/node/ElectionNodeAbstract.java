@@ -16,7 +16,7 @@ public abstract class ElectionNodeAbstract extends Thread implements ElectionNod
     /**
      * Is this node the isInitiator of the echo algorithm?
      */
-    protected boolean isInitiator;
+    protected volatile boolean isInitiator;
 
     /**
      * Collection of known neighbours of this node; only the methods of the

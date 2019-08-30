@@ -16,7 +16,6 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     private ElectionNode wokeUpBy;
     private boolean receivedFirstWakeUpCall = false;
     private StringBuilder echoResult = new StringBuilder();
-
     private volatile boolean won;
     
     public SimpleElectionNode(String name, int identity, boolean isInitiator) {
@@ -70,7 +69,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
         B wakes up D before A does, so
         in the end A receives a wakeup call from D altough A queued wakeups to B,C and D
          */
-        if (identity == currStrongestIdentity) {
+        if (identity == currStrongestIdentity && this != neighbour) {
             count++;
         }
 
@@ -91,18 +90,18 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     public synchronized void run() {
         ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
 
+        /*
         if (isInitiator) {
             System.out.printf("%s %s started the election and wants to be leader %s\n", ColorConstants.ANSI_GREEN,  this, ColorConstants.ANSI_RESET);
             receivedFirstWakeUpCall = true;
             currStrongestIdentity = identity;
             wokeUpBy = this;
         }
-
-        /*
+*/
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep((int) (Math.random() * 10000));
+                    Thread.sleep((int) (Math.random() * 10));
                     if(!isInitiator){
                         SimpleElectionNode.this.isInitiator = true;
                         System.out.printf("%s %s started the election and wants to be leader %s\n", ColorConstants.ANSI_GREEN,  this, ColorConstants.ANSI_RESET);
@@ -114,14 +113,17 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
             }
         }).start();
 
-        */
         while (true) {
             try {
                 if (receivedFirstWakeUpCall) {
                     System.out.println(this + ": waking up neighbours");
+                    // async
                     neighbours.forEach(e -> {
                         if (e != wokeUpBy) {
-                            executorService.submit(() -> e.wakeup(SimpleElectionNode.this, currStrongestIdentity));
+                            int tmp = currStrongestIdentity;
+                            executorService.submit(() -> {
+                                e.wakeup(SimpleElectionNode.this, tmp);
+                            });
                         }
                     });
                     receivedFirstWakeUpCall = false;
@@ -137,8 +139,10 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                     wokeUpBy = null;
                     isInitiator = false;
                     currStrongestIdentity = Integer.MIN_VALUE;
+                    count = 0;
                     echoResult = new StringBuilder();
-                    break;
+
+
                 }
                 System.out.println(this + " is sleeping again");
                 wait();
@@ -146,7 +150,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                 e.printStackTrace();
             }
         }
-        executorService.shutdownNow();
+      //  executorService.shutdown();
     }
 
     private int getNeighbourCount() {

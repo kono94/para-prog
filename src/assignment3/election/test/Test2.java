@@ -1,15 +1,13 @@
 package assignment3.election.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
-
+import assignment3.election.SimpleElectionNode;
+import assignment3.election.node.ElectionCluster;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import assignment3.election.SimpleElectionNode;
-import assignment3.election.node.ElectionCluster;
+import static org.junit.jupiter.api.Assertions.*;
 
 class Test2 {
 
@@ -32,10 +30,10 @@ class Test2 {
 
   @AfterEach
   void tearDown() throws Exception {
-    assertEquals(false, a.hasWon());
-    assertEquals(false, b.hasWon());
-    assertEquals(false, c.hasWon());
-    assertEquals(true, d.hasWon());
+    assertFalse(a.hasWon());
+    assertFalse(b.hasWon());
+    assertFalse(c.hasWon());
+    assertTrue(d.hasWon());
   }
 
   @Test
@@ -49,7 +47,7 @@ class Test2 {
     int count = 0;
     while (!d.hasWon()) {
       try {
-	if (count++ == 10000) {
+	if (count++ == 2000) {
 	  break;
 	}
 	Thread.sleep(1);

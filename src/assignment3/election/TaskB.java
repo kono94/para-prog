@@ -5,9 +5,9 @@ import assignment3.election.node.ElectionCluster;
 public class TaskB {
   public static void main(String[] args) {
     SimpleElectionNode a = new SimpleElectionNode("A", 3, false);
-    SimpleElectionNode b = new SimpleElectionNode("B", 4, true);
+    SimpleElectionNode b = new SimpleElectionNode("B", 4, false);
     SimpleElectionNode c = new SimpleElectionNode("C", 1, false);
-    SimpleElectionNode d = new SimpleElectionNode("D", 2, true);
+    SimpleElectionNode d = new SimpleElectionNode("D", 2, false);
 
     /*
      * a <-> b <-> d 
