@@ -27,7 +27,7 @@ public abstract class ElectionNodeAbstract extends Thread implements ElectionNod
     /**
      * 
      */
-    protected int identity;
+    protected final int identity;
     
     /**
      * 
@@ -41,6 +41,7 @@ public abstract class ElectionNodeAbstract extends Thread implements ElectionNod
         super(name);
         this.name = name;
         this.identity = identity;
+        this.currStrongestIdentity = Integer.MIN_VALUE;
         this.isInitiator = isInitiator;
         if (isInitiator) {
           this.currStrongestIdentity = identity;

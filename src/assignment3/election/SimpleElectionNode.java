@@ -2,15 +2,18 @@ package assignment3.election;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import assignment3.election.node.ElectionNode;
 import assignment3.election.node.ElectionNodeAbstract;
+import assignment3.util.ColorConstants;
 
 public class SimpleElectionNode extends ElectionNodeAbstract {
     private int count = 0;
     private ElectionNode wokeUpBy;
     private boolean receivedFirstWakeUpCall = false;
     private StringBuilder echoResult = new StringBuilder();
+    private final static Logger Log = Logger.getLogger(SimpleElectionNode.class.getName());
 
     public SimpleElectionNode(String name, int identity, boolean isInitiator) {
         super(name, identity, isInitiator);
@@ -83,12 +86,29 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
         ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
 
         if (isInitiator) {
-            System.out.println(this + " started the election and wants to be leader");
+            System.out.printf("%s %s started the election and wants to be leader %s\n", ColorConstants.ANSI_GREEN,  this, ColorConstants.ANSI_RESET);
             receivedFirstWakeUpCall = true;
+            currStrongestIdentity = identity;
             wokeUpBy = this;
-            //neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleElectionNode.this, identity)));
         }
 
+        /*
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep((int) (Math.random() * 10000));
+                    if(!isInitiator){
+                        SimpleElectionNode.this.isInitiator = true;
+                        System.out.printf("%s %s started the election and wants to be leader %s\n", ColorConstants.ANSI_GREEN,  this, ColorConstants.ANSI_RESET);
+                        wakeup(SimpleElectionNode.this, SimpleElectionNode.this.identity);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        */
         while (true) {
             try {
                 if (receivedFirstWakeUpCall) {
@@ -103,14 +123,15 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
 
                 if (count == getNeighbourCount()) {
                     if (isInitiator) {
-                        System.out.println(this + ": WON Finished! Result: \n" + echoResult);
+                        System.out.printf("%s %s won the election process! Result: %s %s\n", ColorConstants.ANSI_RED,  this,  echoResult, ColorConstants.ANSI_RESET);
                     } else {
                         wokeUpBy.echo(this, echoResult);
                     }
                     wokeUpBy = null;
                     isInitiator = false;
+                    currStrongestIdentity = Integer.MIN_VALUE;
+                    echoResult = new StringBuilder();
                     break;
-                   // wait((int) (Math.random()* 10000));
                 }
                 System.out.println(this + " is sleeping again");
                 wait();

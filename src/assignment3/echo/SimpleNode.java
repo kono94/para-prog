@@ -64,7 +64,6 @@ public class SimpleNode extends NodeAbstract {
         if (isInitiator) {
             receivedFirstWakeUpCall = true;
             wokeUpBy = this;
-            //neighbours.forEach(e -> executorService.submit(() -> e.wakeup(SimpleNode.this)));
         }
 
         while (true) {

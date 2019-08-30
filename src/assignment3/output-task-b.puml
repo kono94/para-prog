@@ -1,17 +1,17 @@
 @startuml 
 digraph G {
  concentrate=true 
-A -> D;
-A -> B;
-A -> C;
-D [color=red]D -> A;
-D -> B;
-D -> C;
-B [color=red]B -> A;
-B -> D;
-B -> C;
 C -> A;
 C -> D;
 C -> B;
+A -> C;
+A -> D;
+A -> B;
+D [color=red]D -> C;
+D -> A;
+D -> B;
+B [color=red]B -> C;
+B -> A;
+B -> D;
 } 
  @enduml

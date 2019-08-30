@@ -4,10 +4,10 @@ import assignment3.election.node.ElectionCluster;
 
 public class TaskB {
   public static void main(String[] args) {
-    SimpleElectionNode a = new SimpleElectionNode("A", 4, false);
-    SimpleElectionNode b = new SimpleElectionNode("B", 1, true);
-    SimpleElectionNode c = new SimpleElectionNode("C", 2, false);
-    SimpleElectionNode d = new SimpleElectionNode("D", 3, true);
+    SimpleElectionNode a = new SimpleElectionNode("A", 3, false);
+    SimpleElectionNode b = new SimpleElectionNode("B", 4, true);
+    SimpleElectionNode c = new SimpleElectionNode("C", 1, false);
+    SimpleElectionNode d = new SimpleElectionNode("D", 2, true);
 
     /*
      * a <-> b <-> d 
