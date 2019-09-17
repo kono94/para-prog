@@ -46,7 +46,7 @@ class Test2 {
     int count = 0;
     while (!d.hasWon()) {
       try {
-	if (count++ == 2000) {
+	if (count++ == 7000) {
 	  break;
 	}
 	Thread.sleep(1);
