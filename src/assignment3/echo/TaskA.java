@@ -17,12 +17,11 @@ public class TaskA {
             |--> c <----|
          */
 
-        /*
         a.setupNeighbours(b, c);
         b.setupNeighbours(d);
         c.setupNeighbours(d);
-         */
 
+/*
         a.setupNeighbours(b, e, c, d);
         b.setupNeighbours(a, c, d, c);
         c.setupNeighbours(b, d, e, a);
@@ -30,7 +29,9 @@ public class TaskA {
         e.setupNeighbours(a, b, c, d);
 
 
-        Cluster cluster = new Cluster(a, b, c, d, e);
+ */
+
+        Cluster cluster = new Cluster(a, b, c, d);
         cluster.printConnections();
         cluster.visualize();
         cluster.startNodes();

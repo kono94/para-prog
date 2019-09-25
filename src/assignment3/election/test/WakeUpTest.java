@@ -39,15 +39,15 @@ class WakeUpTest {
     
     c.wakeup(a, 3);
     assertEquals(a.getIdentity(), c.getStrongestIdentity());
-    assertEquals(a, c.getWokeUpBy());
+    assertEquals(a, c.getCallBackTo());
     
     c.wakeup(b, 2);
     assertEquals(a.getIdentity(), c.getStrongestIdentity());
-    assertEquals(a, c.getWokeUpBy());
+    assertEquals(a, c.getCallBackTo());
 
     c.wakeup(d, 4);
     assertEquals(d.getIdentity(), c.getStrongestIdentity());
-    assertEquals(d, c.getWokeUpBy());
+    assertEquals(d, c.getCallBackTo());
   
   }
 

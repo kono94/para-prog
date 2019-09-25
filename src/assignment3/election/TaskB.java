@@ -15,18 +15,23 @@ public class TaskB {
      * |--> c <----|
      */
 
-    /*
-     * a.setupNeighbours(b, c); b.setupNeighbours(d); c.setupNeighbours(d);
-     */
+
+      a.setupNeighbours(b, c);
+      b.setupNeighbours(d);
+      c.setupNeighbours(d);
+
 
     /*
     a <-> b
       <-> c
      */
-    a.setupNeighbours(b, c);
-    b.setupNeighbours();
-    c.setupNeighbours(d,a);
-    d.setupNeighbours(c);
+    /*
+      a.setupNeighbours(b, c,d);
+    b.setupNeighbours(a,c,d);
+    c.setupNeighbours(a,b,d);
+    d.setupNeighbours(a,b,c);
+     */
+
     ElectionCluster cluster = new ElectionCluster(a, b, c, d);
     cluster.printConnections();
     cluster.visualize();

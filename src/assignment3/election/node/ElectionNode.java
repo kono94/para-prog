@@ -21,6 +21,13 @@ public interface ElectionNode {
   void hello(ElectionNode neighbour);
 
   /**
+   *
+   * @param neighbour
+   * @param identity
+   */
+  void electionCall(ElectionNode neighbour, int identity);
+
+  /**
    * Incoming "wakeup" message from a neighbour with identity of the initializer.
    *
    * @param neighbour
@@ -37,6 +44,5 @@ public interface ElectionNode {
    * @param neighbour
    * @param data
    */
-  void echo(ElectionNode neighbour, Object data);
-
+  void echo(ElectionNode neighbour, int identity, Object data);
 }
