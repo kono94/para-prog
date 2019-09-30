@@ -1,8 +1,6 @@
 package assignment3.echo.node;
 
 
-import assignment3.echo.SimpleNode;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

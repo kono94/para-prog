@@ -8,9 +8,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import assignment3.echo.SimpleNode;
-import assignment3.election.SimpleElectionNode;
-
 public class ElectionCluster {
     Set<SimpleElectionNode> nodes;
 

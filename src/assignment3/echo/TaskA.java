@@ -2,6 +2,7 @@ package assignment3.echo;
 
 
 import assignment3.echo.node.Cluster;
+import assignment3.echo.node.SimpleNode;
 
 public class TaskA {
     public static void main(String[] args) {
@@ -27,8 +28,6 @@ public class TaskA {
         c.setupNeighbours(b, d, e, a);
         d.setupNeighbours(a, b, c, e);
         e.setupNeighbours(a, b, c, d);
-
-
  */
 
         Cluster cluster = new Cluster(a, b, c, d);

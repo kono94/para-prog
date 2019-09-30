@@ -1,6 +1,6 @@
 package assignment3.election.test;
 
-import assignment3.election.SimpleElectionNode;
+import assignment3.election.node.SimpleElectionNode;
 import assignment3.election.node.ElectionCluster;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +18,9 @@ class Test2 {
   
   @BeforeEach
   void setUp() throws Exception {
-    a = new SimpleElectionNode("A", 3, false);
+    a = new SimpleElectionNode("A", 1, false);
     b = new SimpleElectionNode("B", 2, true);
-    c = new SimpleElectionNode("C", 1, false);
+    c = new SimpleElectionNode("C", 3, false);
     d = new SimpleElectionNode("D", 4, true);
     a.setupNeighbours(b, c, d);
     b.setupNeighbours(a, c, d);

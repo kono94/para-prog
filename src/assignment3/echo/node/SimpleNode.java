@@ -1,7 +1,4 @@
-package assignment3.echo;
-
-import assignment3.echo.node.Node;
-import assignment3.echo.node.NodeAbstract;
+package assignment3.echo.node;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

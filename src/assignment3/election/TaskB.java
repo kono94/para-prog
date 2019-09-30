@@ -1,6 +1,7 @@
 package assignment3.election;
 
 import assignment3.election.node.ElectionCluster;
+import assignment3.election.node.SimpleElectionNode;
 
 public class TaskB {
   public static void main(String[] args) {
@@ -15,16 +16,11 @@ public class TaskB {
      * |--> c <----|
      */
 
-
       a.setupNeighbours(b, c);
       b.setupNeighbours(d);
       c.setupNeighbours(d);
 
 
-    /*
-    a <-> b
-      <-> c
-     */
     /*
       a.setupNeighbours(b, c,d);
     b.setupNeighbours(a,c,d);

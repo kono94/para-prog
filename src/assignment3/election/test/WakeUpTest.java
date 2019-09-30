@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import assignment3.election.SimpleElectionNode;
+import assignment3.election.node.SimpleElectionNode;
 
 class WakeUpTest {
   
