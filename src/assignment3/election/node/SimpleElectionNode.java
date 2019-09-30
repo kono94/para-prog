@@ -23,7 +23,6 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
         super(name, identity, isInitiator);
         this.won = false;
         isAllowedToStartElection = true;
-
     }
 
     @Override
@@ -49,6 +48,8 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     public synchronized void electionCall(ElectionNode neighbour, int identity) {
         System.out.println(this + ": Got election-call from: " + neighbour + " with identity " + identity);
 
+        // received a "bigger wave", sending electionCalls to all neighbours once again
+        // with the identity just received
         if (currStrongestIdentity < identity) {
             System.out.println(this + ": received higher identity wave from " + neighbour + " (" + currStrongestIdentity + " < " + identity + ")");
             callBackTo = neighbour;
@@ -56,29 +57,38 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
             receivedFirstElectionCall = true;
             electionCount = 0;
 
+            // receiving a higher identity as previously saved means the node cannot be an
+            // initiator anymore. The only case this is possible is, if the node sent an election call
+            // to itself while starting an election process on its one
             if (isInitiator && currStrongestIdentity != this.identity) {
                 System.out.printf("%s %s is not part of the election anymore %s\n", ColorConstants.ANSI_YELLOW, this, ColorConstants.ANSI_RESET);
                 isInitiator = false;
             }
-        } else if (currStrongestIdentity > identity) {
-            System.out.println(this + ": current strongest identity is bigger than from " + neighbour + " (" + currStrongestIdentity + " > " + identity + ")");
+
         }
 
-        if (identity == currStrongestIdentity && this != neighbour) {
-            electionCount++;
-        } else {
-            System.out.println(this + ": Ignoring wakeup-call from: " + neighbour);
-        }
+        if (currStrongestIdentity > identity) {
+            // "wave" gets lost
+            System.out.println(this + ": current strongest identity is bigger than from " + neighbour + " (" + currStrongestIdentity + " > " + identity + ") Ignoring election call");
 
-        System.out.println(this + " count: " + electionCount);
+        }else{
+            // do not increase the count in case the node called itself
+            // because count represents the number of neighbours that already called the node
+            if( this != neighbour){
+                electionCount++;
+            }
+        }
+        System.out.println(this + " count: " + electionCount + " / " + this.neighbours.size());
         try {
-            Thread.sleep(600);
+            Thread.sleep((int)(Math.random()*1 + 0.5)* 300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         notify();
     }
 
+    // Data structure to capsule all necessary fields as in "SimpleNode" from the echo algorithm,
+    // so multiple echo algorithms are able to run at the same time
     private class EchoData {
         private ElectionNode wokeUpBy = null;
         private boolean receivedFirstWakeUpCall = false;
@@ -113,7 +123,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
             // System.out.println(this + ": Ignoring wakeup-call from: " + neighbour);
         }
         try {
-            Thread.sleep(600);
+            Thread.sleep((int)(Math.random()*1 + 0.5)* 300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,18 +143,22 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
     public synchronized void run() {
         ExecutorService executorService = Executors.newFixedThreadPool(neighbours.size());
 
+        // Mechanism for nodes to start the election once again
         new Thread(() -> {
             while (true) {
                 try {
+                    // necessary synchronized?
                     synchronized (SimpleElectionNode.this) {
                         if (isAllowedToStartElection && !isInitiator && currStrongestIdentity == Integer.MIN_VALUE && !isEchoInitiator) {
                             isInitiator = true;
+                            // prevent node from starting another election when previous election is not finished yet (the one it started itself)
                             isAllowedToStartElection = false;
                             System.out.printf("%s %s started the election and wants to be leader %s\n", ColorConstants.ANSI_GREEN, this, ColorConstants.ANSI_RESET);
+                            // node starts the election by sending an election call to itself
                             electionCall(this, identity);
                         }
                     }
-                    Thread.sleep(1000 * identity + 3000);
+                    Thread.sleep((int) (Math.random() * 3000 * identity));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -159,9 +173,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                     neighbours.forEach(e -> {
                         if (e != callBackTo) {
                             int tmp = currStrongestIdentity;
-                            executorService.submit(() -> {
-                                e.electionCall(SimpleElectionNode.this, tmp);
-                            });
+                            executorService.submit(() -> e.electionCall(SimpleElectionNode.this, tmp));
                         }
                     });
                     receivedFirstElectionCall = false;
@@ -170,17 +182,21 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                 if (electionCount == getNeighbourCount()) {
                     if (isInitiator || identity == this.currStrongestIdentity) {
                         System.out.printf("%s %s won the election process! Result: %s\n", ColorConstants.ANSI_RED, this, ColorConstants.ANSI_RESET);
+                        // for testing purposes
                         won = true;
-                        //start echo
+                        // start echo algorithm after winning the election
                         if (!identityToEchoData.containsKey(identity)) {
                             identityToEchoData.put(identity, new EchoData());
                         }
                         System.out.println("ECHO ALGORITHM IN PROGRESS...");
                         isEchoInitiator = true;
                         EchoData echoData = identityToEchoData.get(identity);
+                        // starting echo algorithm by sending a wakeup call to itself
                         echoData.receivedFirstWakeUpCall = true;
                         echoData.wokeUpBy = this;
                     } else {
+                        // similar to the "callback" in "echo", send an election call back to the first node
+                        // which sent the strongestIdentity
                         final ElectionNode d = callBackTo;
                         final int tmp = this.currStrongestIdentity;
                         executorService.submit(() -> {
@@ -188,6 +204,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                             d.electionCall(this, tmp);
                         });
                     }
+                    // reset parameters after node finished its part in the election process
                     isInitiator = false;
                     isAllowedToStartElection = false;
                     callBackTo = null;
@@ -195,13 +212,15 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                     electionCount = 0;
                 }
 
+                // Optional to process multiple echo algorithms at once
+                // by using a map for every identity possible from the leader
                 for (Map.Entry<Integer, EchoData> data : identityToEchoData.entrySet()) {
                     final int identity = data.getKey();
                     EchoData echoData = data.getValue();
 
+                    // Same logic as in taskA
                     if (echoData.receivedFirstWakeUpCall) {
                         //  System.out.println(this + " waking up neighbours");
-
                         neighbours.forEach(e -> {
                             if (e != echoData.wokeUpBy) {
                                 executorService.submit(() -> e.wakeup(SimpleElectionNode.this, identity));
@@ -217,6 +236,7 @@ public class SimpleElectionNode extends ElectionNodeAbstract {
                             //  System.out.println("Echo: " + this + " sent echo and finished");
                             echoData.wokeUpBy.echo(this, identity, echoData.echoResult);
                         }
+                        // after a node completed its part in the echo process, it is able to start an election again
                         isAllowedToStartElection = true;
                         echoData.clear();
                     }
